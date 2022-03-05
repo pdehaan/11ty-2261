@@ -2,21 +2,33 @@
 title: issue 2261
 ---
 
-<h1>{{ title }}</h1>
-
 {% from "block.njk" import block with context %}
 
-{% call block() %}
-    {# Works #}
-    {% user "shortcode" %}
+<h1>{{ title }}</h1>
 
-    {# ERROR: TypeError: Cannot read properties of null (reading 'typename') #}
-    {% user2 "paired shortcode 1" %}
-        Hello
-    {% enduser2 %}
+{% call block() %}
+  {# Works #}
+  {% user "shortcode" %}
+
+  {# ERROR: TypeError: Cannot read properties of null (reading 'typename') #}
+  {# {% user2 "paired shortcode 1" %}
+    Hello
+  {% enduser2 %} #}
 {% endcall %}
 
 {# Works #}
-{% user2 "paired shortcode 2" %}
+{%- user2 "paired shortcode 2" %}
+  Hello
+{% enduser2 -%}
+
+{# Workaround #}
+{%- set tmp %}
+  {% user2 "paired shortcode 2" %}
     Hello
-{% enduser2 %}
+  {% enduser2 %}
+{% endset -%}
+
+{%- call block() %}
+  {% user "shortcode" %}
+  {{ tmp }}
+{% endcall -%}
