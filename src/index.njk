@@ -1,0 +1,22 @@
+---
+title: issue 2261
+---
+
+<h1>{{ title }}</h1>
+
+{% from "block.njk" import block with context %}
+
+{% call block() %}
+    {# Works #}
+    {% user "shortcode" %}
+
+    {# ERROR: TypeError: Cannot read properties of null (reading 'typename') #}
+    {% user2 "paired shortcode 1" %}
+        Hello
+    {% enduser2 %}
+{% endcall %}
+
+{# Works #}
+{% user2 "paired shortcode 2" %}
+    Hello
+{% enduser2 %}
